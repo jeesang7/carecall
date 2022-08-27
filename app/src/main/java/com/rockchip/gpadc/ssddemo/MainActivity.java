@@ -24,6 +24,10 @@ import java.util.ArrayList;
 import static com.rockchip.gpadc.ssddemo.CameraSurfaceRender.TAG;
 import com.rockchip.gpadc.ssddemo.InferenceResult.Recognition;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 /**
  * Created by Randall on 2018/10/15
  */
@@ -43,6 +47,8 @@ public class MainActivity extends Activity {
 
     private PorterDuffXfermode mPorterDuffXfermodeClear;
     private PorterDuffXfermode mPorterDuffXfermodeSRC;
+
+    Call<CareModel> call;
 
     // UI线程，用于更新处理结果
     private Handler mHandler = new Handler()
@@ -83,6 +89,21 @@ public class MainActivity extends Activity {
         mRender = new CameraSurfaceRender(mGLSurfaceView, mHandler);
         mGLSurfaceView.setRenderer(mRender);
         mGLSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+
+        Log.d(TAG, "CareClient getCareService");
+        call = CareClient.getCareService().doGetHomeMsg();;
+        call.enqueue(new Callback<CareModel>(){
+            @Override
+            public void onResponse(Call<CareModel> call, Response<CareModel> response) {
+                CareModel result = response.body();
+                Log.d(TAG, "CareClient Resp.:" + result.getMsg());
+            }
+
+            @Override
+            public void onFailure(Call<CareModel> call, Throwable t) {
+                Log.d(TAG, "CareClient Resp. failed:" + t.toString());
+            }
+        });
     }
 
     public static int sp2px(float spValue) {
