@@ -8,7 +8,11 @@ public class CareModel {
     @Expose
     private String msg;
 
-    public String getMsg(){
+    public String getMsg() {
         return msg;
+    }
+
+    public void setMsg(String s) {
+        msg = s;
     }
 }

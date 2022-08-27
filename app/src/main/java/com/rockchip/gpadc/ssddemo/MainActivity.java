@@ -183,11 +183,13 @@ public class MainActivity extends Activity {
         mTrackResultView.setScaleType(ImageView.ScaleType.FIT_XY);
         mTrackResultView.setImageBitmap(mTrackResultBitmap);
 
-        if (countRegoPerson > 100) {
+        if (countRegoPerson > 100) {  // continuous recog. for person per 5sec.
             countRegoPerson = 0;
 
             Log.d(TAG, "CareClient getCareService");
-            call = CareClient.getCareService().doGetHomeMsg();;
+            CareModel careModel = new CareModel();
+            careModel.setMsg("emergency");
+            call = CareClient.getCareService().doPostEmergency(careModel);
             call.enqueue(new Callback<CareModel>(){
                 @Override
                 public void onResponse(Call<CareModel> call, Response<CareModel> response) {
