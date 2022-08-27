@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import static com.rockchip.gpadc.ssddemo.CameraSurfaceRender.TAG;
 import com.rockchip.gpadc.ssddemo.InferenceResult.Recognition;
@@ -49,6 +50,7 @@ public class MainActivity extends Activity {
     private PorterDuffXfermode mPorterDuffXfermodeSRC;
 
     Call<CareModel> call;
+    private int countRegoPerson = 0;
 
     // UI线程，用于更新处理结果
     private Handler mHandler = new Handler()
@@ -167,14 +169,38 @@ public class MainActivity extends Activity {
             detection.top *= height;
             detection.bottom *= height;
 
-            Log.d(TAG, "rego:" + rego.toString());
+//            Log.d(TAG, "rego:" + rego.toString() + " t:" + rego.getTitle() + " cls:" + rego.getClass());
 
             mTrackResultCanvas.drawRect(detection, mTrackResultPaint);
             mTrackResultCanvas.drawText(rego.getTitle(), detection.left+5, detection.bottom-5, mTrackResultTextPaint);
+
+            if (Objects.equals(rego.getTitle(), "person")) {
+                countRegoPerson++;
+//                Log.d(TAG, "regoPersonCount increase..." + Integer.toString(countRegoPerson));
+            }
         }
 
         mTrackResultView.setScaleType(ImageView.ScaleType.FIT_XY);
         mTrackResultView.setImageBitmap(mTrackResultBitmap);
+
+        if (countRegoPerson > 100) {
+            countRegoPerson = 0;
+
+            Log.d(TAG, "CareClient getCareService");
+            call = CareClient.getCareService().doGetHomeMsg();;
+            call.enqueue(new Callback<CareModel>(){
+                @Override
+                public void onResponse(Call<CareModel> call, Response<CareModel> response) {
+                    CareModel result = response.body();
+                    Log.d(TAG, "CareClient Resp.:" + result.getMsg());
+                }
+
+                @Override
+                public void onFailure(Call<CareModel> call, Throwable t) {
+                    Log.d(TAG, "CareClient Resp. failed:" + t.toString());
+                }
+            });
+        }
     }
 
     @Override
