@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">RK3399Pro SSD Demo</string>
-    <string name="app_title">RK3399Pro SSD Demo</string>
-    <string name="powered_by_rockchip">Powered by Rockchip GPADC.</string>
-    <string name="title_activity_start">RK3399Pro SSD Demo</string>
-    <string name="buttonCamera">SSD Camera Demo</string>
-    <string name="buttonImage">SSD Image Demo</string>
+    <string name="app_name">CareCall</string>
+    <string name="app_title">CareCall</string>
+    <string name="powered_by_rockchip">Powered by JeesLab</string>
+    <string name="title_activity_start">CareCall</string>
+    <string name="buttonCamera">CareCall</string>
+    <string name="buttonImage">CareCall</string>
 </resources>
